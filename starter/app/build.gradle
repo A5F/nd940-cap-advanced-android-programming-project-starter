@@ -68,7 +68,9 @@ dependencies {
     implementation "com.squareup.moshi:moshi-adapters:$version_moshi"
 
     // Glide
-    //TODO: Add Glide Implementation
+    //Add Glide Implementation
+    // i prefer coil library, it's completely in kotlin and easy to use
+    implementation "io.coil-kt:coil:$version_coil"
 
     //Room
     implementation "androidx.room:room-runtime:$version_room"
@@ -79,5 +81,5 @@ dependencies {
 
 
     implementation "io.insert-koin:koin-android:$version_koin"
-    implementation "io.insert-koin:koin-android-ext:$version_koin"
+    implementation "io.insert-koin:koin-android-ext:$version_koin_ext"
 }
