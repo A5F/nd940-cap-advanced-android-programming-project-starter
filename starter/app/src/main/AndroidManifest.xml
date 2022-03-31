@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:name=".PoliticalApplication"
         android:theme="@style/AppTheme">
-        <activity android:name="com.example.android.politicalpreparedness.MainActivity"
+        <activity android:name="com.example.android.politicalpreparedness.presentation.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

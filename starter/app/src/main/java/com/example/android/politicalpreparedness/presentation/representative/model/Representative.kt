@@ -1,4 +1,4 @@
-package com.example.android.politicalpreparedness.representative.model
+package com.example.android.politicalpreparedness.presentation.representative.model
 
 import com.example.android.politicalpreparedness.data.network.models.Office
 import com.example.android.politicalpreparedness.data.network.models.Official

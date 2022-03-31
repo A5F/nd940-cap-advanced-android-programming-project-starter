@@ -1,4 +1,4 @@
-package com.example.android.politicalpreparedness.election.adapter
+package com.example.android.politicalpreparedness.presentation.election.adapter
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter

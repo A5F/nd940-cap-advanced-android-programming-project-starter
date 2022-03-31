@@ -1,4 +1,4 @@
-package com.example.android.politicalpreparedness.representative.adapter
+package com.example.android.politicalpreparedness.presentation.representative.adapter
 
 import android.content.Intent
 import android.content.Intent.ACTION_VIEW
@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.databinding.ViewholderRepresentativeBinding
 import com.example.android.politicalpreparedness.data.network.models.Channel
-import com.example.android.politicalpreparedness.representative.model.Representative
+import com.example.android.politicalpreparedness.presentation.representative.model.Representative
 
 class RepresentativeListAdapter: ListAdapter<Representative, RepresentativeViewHolder>(RepresentativeDiffCallback()){
 
