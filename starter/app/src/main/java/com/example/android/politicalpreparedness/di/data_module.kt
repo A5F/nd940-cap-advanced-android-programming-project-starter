@@ -1,12 +1,15 @@
 package com.example.android.politicalpreparedness.di
 
-import com.example.android.politicalpreparedness.network.CivicsApiService
-import com.example.android.politicalpreparedness.network.jsonadapter.DateAdapter
-import com.example.android.politicalpreparedness.network.jsonadapter.ElectionAdapter
+import androidx.room.Room
+import com.example.android.politicalpreparedness.data.database.ElectionDatabase
+import com.example.android.politicalpreparedness.data.network.CivicsApiService
+import com.example.android.politicalpreparedness.data.network.jsonadapter.DateAdapter
+import com.example.android.politicalpreparedness.data.network.jsonadapter.ElectionAdapter
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.OkHttpClient
+import org.koin.android.ext.koin.androidContext
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
@@ -19,6 +22,20 @@ private const val BASE_URL = "https://www.googleapis.com/civicinfo/v2/"
 const val OKHTTP_CLIENT = "okhttp_client"
 
 val dataModule = module {
+    //database
+    single {
+        synchronized(this) {
+                Room.databaseBuilder(
+                    androidContext().applicationContext,
+                    ElectionDatabase::class.java,
+                    "election_database")
+                    .fallbackToDestructiveMigration()
+                    .build()
+            }
+    }
+
+
+    ///network
 //  Add adapters for Java Date and custom adapter ElectionAdapter (included in project)
     single {
         // private val moshi
