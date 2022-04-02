@@ -1,6 +1,7 @@
 package com.example.android.politicalpreparedness.di
 
 import androidx.room.Room
+import com.example.android.politicalpreparedness.data.PoliticalRepository
 import com.example.android.politicalpreparedness.data.database.ElectionDatabase
 import com.example.android.politicalpreparedness.data.network.CivicsApiService
 import com.example.android.politicalpreparedness.data.network.jsonadapter.DateAdapter
@@ -15,13 +16,17 @@ import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
-const val API_KEY = "" //TODO: Place your API Key Here
+const val API_KEY = "AIzaSyAhZoPGry4jdNhGZBf_n99Rqagg6NDF33k" //TODO: Place your API Key Here
 
 private const val BASE_URL = "https://www.googleapis.com/civicinfo/v2/"
 
 const val OKHTTP_CLIENT = "okhttp_client"
 
 val dataModule = module {
+
+   //repository
+    single { PoliticalRepository(get(), get()) }
+
     //database
     single {
         synchronized(this) {

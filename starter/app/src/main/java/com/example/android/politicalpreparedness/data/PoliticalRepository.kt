@@ -5,6 +5,7 @@ import com.example.android.politicalpreparedness.data.network.CivicsApiService
 import com.example.android.politicalpreparedness.data.network.RetrofitUtils
 import com.example.android.politicalpreparedness.data.network.RetrofitUtils.checkAndParseResponse
 import com.example.android.politicalpreparedness.data.network.models.Address
+import com.example.android.politicalpreparedness.data.network.models.Election
 import com.example.android.politicalpreparedness.data.network.models.GetVotersRequest
 import com.example.android.politicalpreparedness.data.network.models.VoterInfoResponse
 import com.example.android.politicalpreparedness.presentation.representative.model.Representative
@@ -22,6 +23,20 @@ class PoliticalRepository(private val appService: CivicsApiService, private val 
         val parsedResponse = response.checkAndParseResponse()
         return parsedResponse
 
+    }
+
+    fun getElectionById(electionId: Long): Election?{
+        return database.getElectionById(electionId)
+    }
+
+    fun saveElection(election: Election):Boolean{
+        database.saveElection(election)
+        return true
+    }
+
+    fun deleteElection(electionId: Long):Boolean{
+        database.removeElection(electionId)
+        return true
     }
 
 }
