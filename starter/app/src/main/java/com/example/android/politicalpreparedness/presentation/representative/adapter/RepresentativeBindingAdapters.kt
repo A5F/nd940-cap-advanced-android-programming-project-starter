@@ -1,10 +1,7 @@
 package com.example.android.politicalpreparedness.presentation.representative.adapter
 
 import android.view.View
-import android.widget.ArrayAdapter
-import android.widget.ImageView
-import android.widget.ProgressBar
-import android.widget.Spinner
+import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
@@ -52,6 +49,14 @@ inline fun <reified T> toTypedAdapter(adapter: ArrayAdapter<*>): ArrayAdapter<T>
     return adapter as ArrayAdapter<T>
 }
 
+@BindingAdapter("shouldShowView")
+fun shouldShowView(textView: TextView, any: Any?) {
+    textView.visibility = if (any != null) {
+        View.VISIBLE
+    } else {
+        View.GONE
+    }
+}
 
 @BindingAdapter("loaderState")
 fun bindLoaderState(progressBar: ProgressBar, state: ResourceState?) {

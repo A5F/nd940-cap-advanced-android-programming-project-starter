@@ -1,5 +1,6 @@
 package com.example.android.politicalpreparedness.presentation.election
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -23,9 +24,9 @@ class VoterInfoViewModel(private val votersInfoUseCase: GetVotersInfoUseCase,
                          private val deleteElectionUseCase: DeleteElectionUseCase)
     : BaseViewModel() {
 
-    val statusElectionLiveData =  MutableLiveData<Resource<Election?>>()
+    val statusElectionLiveData =  MutableLiveData<Resource<Election>>()
 
-    val electionLiveData =  MutableLiveData<Resource<Election?>>()
+    val electionLiveData =  MutableLiveData<Resource<Election>>()
     val saveElectionLiveData =  MutableLiveData<Resource<Boolean>>()
     val deleteElectionLiveData =  MutableLiveData<Resource<Boolean>>()
 
@@ -36,22 +37,27 @@ class VoterInfoViewModel(private val votersInfoUseCase: GetVotersInfoUseCase,
 
 
     //Add live data to hold voter info
-    private var _voterInfoLiveData = MutableLiveData<Resource<VoterInfoResponse>>()
+    var voterInfoLiveData = MutableLiveData<Resource<VoterInfoResponse>>()
+
 
     // Add var and methods to populate voter info
     fun getElectionData(division: Division, id: Long) {
         val address = listOf(division.state, division.country)
             .filterNot { it.isBlank() }
             .joinToString(separator = ",")
-        votersInfoUseCase.executeAndDispose(_voterInfoLiveData,
+        votersInfoUseCase.executeAndDispose(voterInfoLiveData,
             GetVotersRequest(address = address, electionId= id)
         )
+
+        getElection(electionId= id) //check if i follow the election
     }
 
 
     // Add var and methods to support loading URLs
-    fun loadUrl(url: String) {
-        _webUrlLiveData.value = url
+    fun loadUrl(url: String?) {
+      url?.also {
+          _webUrlLiveData.value =it
+      }
     }
 
 
@@ -59,6 +65,18 @@ class VoterInfoViewModel(private val votersInfoUseCase: GetVotersInfoUseCase,
     fun getElection(electionId: Long){
         loadElectionUseCase.executeAndDispose(electionLiveData, electionId)
     }
+    fun updateElection(electionId: Long){
+        val election = electionLiveData.value?.data as Election?
+        if (election!= null) {
+            Log.d("update election", "election not null, devo eliminare")
+
+        }else{
+            Log.d("update election", "election null, devo salvare")
+
+        }
+
+    }
+
 
     fun saveElection(electionId: Long){
         saveElectionUseCase.executeAndDispose(saveElectionLiveData, electionId)

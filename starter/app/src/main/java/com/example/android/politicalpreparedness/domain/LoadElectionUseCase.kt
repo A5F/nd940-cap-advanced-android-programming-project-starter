@@ -6,16 +6,22 @@ import com.example.android.politicalpreparedness.data.network.models.GetVotersRe
 import com.example.android.politicalpreparedness.data.network.models.VoterInfoResponse
 import com.example.android.politicalpreparedness.domain.base.BaseUsecase
 import com.example.android.politicalpreparedness.domain.base.SyncUsecase
+import java.lang.Exception
 
 //use case per local load
 
 class LoadElectionUseCase(
     private val politicalRepository: PoliticalRepository
-)  : BaseUsecase<Election?, Long?>(
+)  : BaseUsecase<Election, Long?>(
 
 ) {
-    override suspend fun invoke(params: Long?): Election? {
-        return politicalRepository.getElectionById(params!!)
+    override suspend fun invoke(params: Long?): Election {
+        val election =  politicalRepository.getElectionById(params!!)
+        if (election != null){
+            return election
+        }else{
+            throw Exception("ELECTION_NOT_ALREADY_SAVED")
+        }
     }
 }
 

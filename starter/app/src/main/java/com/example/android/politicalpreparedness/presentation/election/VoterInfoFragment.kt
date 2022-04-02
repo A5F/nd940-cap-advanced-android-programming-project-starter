@@ -3,27 +3,30 @@ package com.example.android.politicalpreparedness.presentation.election
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.databinding.FragmentVoterInfoBinding
-import com.google.android.material.snackbar.Snackbar
+import com.example.android.politicalpreparedness.domain.base.ResponseInterface
+import com.example.android.politicalpreparedness.domain.base.observeWithResource
 import org.koin.android.ext.android.inject
 
-class VoterInfoFragment : Fragment() {
+class VoterInfoFragment : Fragment(), ResponseInterface {
 
     private val voterInfoViewModel :VoterInfoViewModel by inject()
-
+    lateinit var  viewBinding : FragmentVoterInfoBinding
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+                              savedInstanceState: Bundle?): View {
 
         // Add ViewModel values and create ViewModel
         // Add binding values
-        val viewBinding : FragmentVoterInfoBinding= FragmentVoterInfoBinding.inflate(inflater, container, false)
-        viewBinding.lifecycleOwner = this
+        viewBinding = FragmentVoterInfoBinding.inflate(inflater, container, false)
+        viewBinding.lifecycleOwner = viewLifecycleOwner
         viewBinding.viewModel = voterInfoViewModel
 
         // Populate voter info -- hide views without provided data.
@@ -33,15 +36,13 @@ class VoterInfoFragment : Fragment() {
         arguments?.let {
             val division = VoterInfoFragmentArgs.fromBundle(it).argDivision
             val electionId = VoterInfoFragmentArgs.fromBundle(it).argElectionId
-//            voterInfoViewModel.fetchElectionData(division, electionId.toLong())
-//            voterInfoViewModel.onPageLoad(electionId.toLong())
-            viewBinding.electionId = electionId.toLong()
+            voterInfoViewModel.getElectionData(division, electionId.toLong())
         }
 
         // Handle loading of URLs
-        voterInfoViewModel.webUrl.observe(viewLifecycleOwner, Observer {
+        voterInfoViewModel.webUrl.observe(viewLifecycleOwner) {
             loadUrl(it)
-        })
+        }
 
         // Handle save button UI state
 //        voterInfoViewModel.electionSaved.observe(viewLifecycleOwner, Observer {
@@ -59,13 +60,42 @@ class VoterInfoFragment : Fragment() {
 //                }
 //            }
 //        })
-//        voterInfoViewModel.voterInfoLiveData.observe(viewLifecycleOwner, Observer {
-//            (activity as AppCompatActivity).supportActionBar?.title= it.election.name
-//        })
-        // cont'd Handle save button clicks
         return viewBinding.root
 
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initObserver()
+    }
+
+    private fun initObserver(){
+        voterInfoViewModel.voterInfoLiveData.observeWithResource(this,
+            onLoading = {
+                viewBinding.statusLoading.isVisible = it
+            }, onError = {
+                Log.d("voterInfoLiveData", it.toString())
+            }){
+            Log.d("voterInfoLiveData", it.toString())
+            (activity as AppCompatActivity).supportActionBar?.title= it.election.name
+            viewBinding.voterInfo = it
+        }
+
+        voterInfoViewModel.electionLiveData.observeWithResource(this,
+            onLoading = {
+
+            }, onError = {
+                Log.d("electionLiveData", it.toString())
+                if (it.message =="ELECTION_NOT_ALREADY_SAVED"){
+                    viewBinding.actionUpdate.text = getString(R.string.label_follow_election)
+                }
+            }) {
+            Log.d("electionLiveData", it.toString())
+            viewBinding.actionUpdate.text = getString(R.string.label_unfollow_election)
+        }
+
+    }
+
 
     // Create method to load URL intents
     private fun loadUrl(url: String) {
@@ -76,6 +106,7 @@ class VoterInfoFragment : Fragment() {
             )
         )
     }
+
 
     override fun onDestroyView() {
         (activity as AppCompatActivity).supportActionBar?.title= getString(R.string.app_name)

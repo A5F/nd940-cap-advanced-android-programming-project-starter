@@ -1,6 +1,5 @@
 package com.example.android.politicalpreparedness.presentation.election
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.android.politicalpreparedness.data.network.models.Election
 import com.example.android.politicalpreparedness.domain.GetElectionUseCase
@@ -21,15 +20,19 @@ class ElectionsViewModel(
     // Create live data val for saved elections
     val savedElectionsLiveData = MutableLiveData<Resource<List<Election>>>()
 
-    // Create val and functions to populate live data for upcoming elections from the API and saved elections from local database
 
-    fun getElectionData(){
+    fun getData(){
+        getElectionData()
+        getSavedElection()
+    }
+
+    // Create val and functions to populate live data for upcoming elections from the API and saved elections from local database
+    private fun getElectionData(){
         getElectionUseCase.executeAndDispose(electionsLiveData)
     }
 
     // Create functions to navigate to saved or upcoming election voter info
-
-    fun  loadElectionListUseCase(){
+    private fun  getSavedElection(){
         loadElectionListUseCase.executeAndDispose(savedElectionsLiveData)
     }
 }

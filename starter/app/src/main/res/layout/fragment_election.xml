@@ -66,6 +66,17 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/item_election"/>
 <!--        app:electionListData="@{electionViewModel.savedElectionsLiveData}"-->
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/labelNoSavedElections"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:text="@string/label_no_saved_elections"
+            android:layout_margin="@dimen/small_margin"
+            app:layout_constraintTop_toBottomOf="@id/labelSavedElections"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            style="@style/TextStyle.NormalStyle"/>
        <ProgressBar
             android:id="@+id/status_loading_wheel"
             android:layout_width="wrap_content"

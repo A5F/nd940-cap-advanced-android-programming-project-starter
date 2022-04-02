@@ -53,25 +53,3 @@ fun <T> MutableLiveData<Resource<T>>.observeWithResource(
         }
     }
 }
-
-//use outside viewModel, like broadcast receive or other
-fun <T, Y> BaseUsecase<T, Y>.createAsyncCall(
-    onSuccess: (T) -> Unit,
-    onError: (e: Exception) -> Unit,
-    params: Y? = null
-) {
-    MainScope().launch {
-        val scope = Dispatchers.IO
-        try {
-            withContext(scope) {
-                val response = this@createAsyncCall.invoke(params)
-                Log.d("BaseViewModel", "success ${response.toString()}")
-                onSuccess(response)
-                scope.cancel()
-            }
-        } catch (e: Exception) {
-            onError(e)
-            scope.cancel()
-        }
-    }
-}
