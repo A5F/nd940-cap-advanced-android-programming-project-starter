@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="electionData"
+            type="com.example.android.politicalpreparedness.data.network.models.Election" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/xsmall_margin"
+        android:paddingBottom="@dimen/xsmall_margin">
+<!--        android:onClick="@{() -> electionListener.onElectionItemSelected(electionData)}">-->
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/labelElectionTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/labelElectionTime"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            style="@style/TextStyle.TitleStyle"
+            android:text="@{electionData.name}"
+            tools:text="VIP Test Election"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/labelElectionTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/labelElectionTitle"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="@{electionData.name}"
+            style="@style/TextStyle.NormalStyle"
+            tools:text="asdfasfasdfasdfasdfasdf"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

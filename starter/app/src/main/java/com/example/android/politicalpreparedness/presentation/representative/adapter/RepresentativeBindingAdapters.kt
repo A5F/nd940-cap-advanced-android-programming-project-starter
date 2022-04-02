@@ -1,14 +1,21 @@
 package com.example.android.politicalpreparedness.presentation.representative.adapter
 
+import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.Spinner
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
+import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.CircleCropTransformation
 import com.example.android.politicalpreparedness.R
+import com.example.android.politicalpreparedness.data.network.models.Election
+import com.example.android.politicalpreparedness.domain.base.ResourceState
+import com.example.android.politicalpreparedness.presentation.election.adapter.ElectionListAdapter
+import com.example.android.politicalpreparedness.presentation.representative.model.Representative
 
 @BindingAdapter("profileImage")
 fun fetchImage(view: ImageView, src: String?) {
@@ -44,3 +51,14 @@ fun Spinner.setNewValue(value: String?) {
 inline fun <reified T> toTypedAdapter(adapter: ArrayAdapter<*>): ArrayAdapter<T>{
     return adapter as ArrayAdapter<T>
 }
+
+
+@BindingAdapter("loaderState")
+fun bindLoaderState(progressBar: ProgressBar, state: ResourceState?) {
+    when (state) {
+        ResourceState.LOADING -> progressBar.visibility = View.VISIBLE
+        ResourceState.ERROR -> progressBar.visibility = View.GONE
+        ResourceState.SUCCESS -> progressBar.visibility = View.GONE
+    }
+}
+

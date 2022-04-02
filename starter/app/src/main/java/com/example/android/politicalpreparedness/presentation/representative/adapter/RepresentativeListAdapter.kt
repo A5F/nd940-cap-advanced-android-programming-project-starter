@@ -3,14 +3,16 @@ package com.example.android.politicalpreparedness.presentation.representative.ad
 import android.content.Intent
 import android.content.Intent.ACTION_VIEW
 import android.net.Uri
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.politicalpreparedness.R
-import com.example.android.politicalpreparedness.databinding.ViewholderRepresentativeBinding
 import com.example.android.politicalpreparedness.data.network.models.Channel
+import com.example.android.politicalpreparedness.databinding.ItemRepresentativeBinding
 import com.example.android.politicalpreparedness.presentation.representative.model.Representative
 
 class RepresentativeListAdapter: ListAdapter<Representative, RepresentativeViewHolder>(RepresentativeDiffCallback()){
@@ -25,19 +27,32 @@ class RepresentativeListAdapter: ListAdapter<Representative, RepresentativeViewH
     }
 }
 
-class RepresentativeViewHolder(val binding: ViewholderRepresentativeBinding): RecyclerView.ViewHolder(binding.root) {
+class RepresentativeViewHolder(val binding: ItemRepresentativeBinding): RecyclerView.ViewHolder(binding.root) {
+
+    //Add companion object to inflate ViewHolder (from)
+    companion object {
+        fun from(parent: ViewGroup): RepresentativeViewHolder {
+            val viewBinding = ItemRepresentativeBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            return RepresentativeViewHolder(viewBinding)
+        }
+    }
 
     fun bind(item: Representative) {
         binding.representative = item
         binding.representativePhoto.setImageResource(R.drawable.ic_profile)
 
-        //TODO: Show social links ** Hint: Use provided helper methods
-        //TODO: Show www link ** Hint: Use provided helper methods
-
+        // Show social links ** Hint: Use provided helper methods
+        item.official.channels?.let {
+            showSocialLinks(it)
+        }
+        // Show www link ** Hint: Use provided helper methods
+        item.official.urls?.let {
+            showWWWLinks(it)
+        }
         binding.executePendingBindings()
     }
 
-    //TODO: Add companion object to inflate ViewHolder (from)
+
 
     private fun showSocialLinks(channels: List<Channel>) {
         val facebookUrl = getFacebookUrl(channels)
@@ -76,6 +91,17 @@ class RepresentativeViewHolder(val binding: ViewholderRepresentativeBinding): Re
 
 }
 
-//TODO: Create RepresentativeDiffCallback
+// Create RepresentativeDiffCallback
+class RepresentativeDiffCallback: DiffUtil.ItemCallback<Representative>() {
+    override fun areItemsTheSame(oldItem: Representative, newItem: Representative): Boolean {
+        return oldItem == newItem
+    }
 
-//TODO: Create RepresentativeListener
+    override fun areContentsTheSame(oldItem: Representative, newItem: Representative): Boolean {
+        return oldItem.office.name == newItem.office.name &&
+                oldItem.official.name == newItem.official.name
+    }
+}
+
+// Create RepresentativeListener
+// i havent use a callback in this adapter

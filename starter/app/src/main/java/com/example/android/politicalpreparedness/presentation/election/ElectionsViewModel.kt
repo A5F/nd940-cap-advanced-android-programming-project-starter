@@ -1,5 +1,6 @@
 package com.example.android.politicalpreparedness.presentation.election
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.android.politicalpreparedness.data.network.models.Election
 import com.example.android.politicalpreparedness.domain.GetElectionUseCase
