@@ -7,15 +7,14 @@ import com.example.android.politicalpreparedness.data.network.models.VoterInfoRe
 import com.example.android.politicalpreparedness.domain.base.BaseUsecase
 import com.example.android.politicalpreparedness.domain.base.SyncUsecase
 
-//use case per local load
-
-class LoadElectionUseCase(
+//use case per network download
+class GetElectionUseCase(
     private val politicalRepository: PoliticalRepository
-)  : BaseUsecase<Election?, Long?>(
+)  : BaseUsecase<List<Election>, Unit?>(
 
 ) {
-    override suspend fun invoke(params: Long?): Election? {
-        return politicalRepository.getElectionById(params!!)
+    override suspend fun invoke(params: Unit?): List<Election> {
+        return politicalRepository.getElectionList()
     }
 }
 

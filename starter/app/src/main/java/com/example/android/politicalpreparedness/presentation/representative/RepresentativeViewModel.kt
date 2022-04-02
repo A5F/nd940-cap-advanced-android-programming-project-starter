@@ -1,20 +1,17 @@
 package com.example.android.politicalpreparedness.presentation.representative
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
-import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.data.network.models.Address
-import com.example.android.politicalpreparedness.domain.GetRepresentativeFromNetworkUseCase
+import com.example.android.politicalpreparedness.domain.GetRepresentativeUseCase
 import com.example.android.politicalpreparedness.domain.base.BaseViewModel
 import com.example.android.politicalpreparedness.domain.base.Resource
 import com.example.android.politicalpreparedness.presentation.representative.model.Representative
-import kotlinx.coroutines.launch
 
 class RepresentativeViewModel(
-    private val getRepresentativeFromNetworkUseCase: GetRepresentativeFromNetworkUseCase
+    private val getRepresentativeUseCase: GetRepresentativeUseCase
 ): BaseViewModel() {
 
-    //TODO: Establish live data for representatives and address
+    // Establish live data for representatives and address
     val address = MutableLiveData<Address>()
 
     private val _representatives = MutableLiveData<Resource<List<Representative>>>()
@@ -35,12 +32,12 @@ class RepresentativeViewModel(
         // todo
         //  if (validateEnteredData()) {
             val address = getAddress()
-            getRepresentativeFromNetworkUseCase.executeAndDispose(_representatives, address)
+            getRepresentativeUseCase.executeAndDispose(_representatives, address)
 //        }
 
     }
 
-    //TODO: Create function get address from geo location
+    // Create function get address from geo location
     fun setLocation(newAddress: Address) {
         address.value = Address(
             line1 = newAddress.line1,
@@ -53,8 +50,6 @@ class RepresentativeViewModel(
     }
 
     // Create function to get address from individual fields
-
-
     private fun getAddress(): Address = address.value!!
 
 }

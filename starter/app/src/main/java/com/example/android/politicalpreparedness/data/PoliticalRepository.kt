@@ -12,17 +12,28 @@ import com.example.android.politicalpreparedness.presentation.representative.mod
 
 class PoliticalRepository(private val appService: CivicsApiService, private val database: ElectionDao) {
 
-    fun getRepresentativesFromNetworkAsync(address: Address): List<Representative> {
-        val response = RetrofitUtils.execute(appService.getRepresentativesFromNetworkAsync(address.toFormattedString()))
+    fun getRepresentatives(address: Address): List<Representative> {
+        val response = RetrofitUtils.execute(appService.getRepresentatives(address.toFormattedString()))
         val parsedResponse = response.checkAndParseResponse()
         return parsedResponse.offices.flatMap { office -> office.getRepresentatives(parsedResponse.officials) }
     }
 
     fun getVotersInfo(votersRequest: GetVotersRequest ): VoterInfoResponse {
-        val response = appService.getVoterInfoFromNetwork(votersRequest.address, votersRequest.electionId).execute()
+        val response = appService.getVoterInfo(votersRequest.address, votersRequest.electionId).execute()
         val parsedResponse = response.checkAndParseResponse()
         return parsedResponse
 
+    }
+
+    fun getElectionList(): List<Election>{
+        val response = RetrofitUtils.execute(appService.getElections())
+        val parsedResponse = response.checkAndParseResponse()
+        return parsedResponse.elections
+    }
+
+
+    fun loadElectionList(): List<Election>{
+        return database.getListOfElections()?: emptyList()
     }
 
     fun getElectionById(electionId: Long): Election?{
