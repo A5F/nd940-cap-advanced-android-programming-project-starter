@@ -16,7 +16,7 @@ import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
-const val API_KEY = "AIzaSyAhZoPGry4jdNhGZBf_n99Rqagg6NDF33k" //TODO: Place your API Key Here
+const val API_KEY = "" //TODO: Place your API Key Here
 
 private const val BASE_URL = "https://www.googleapis.com/civicinfo/v2/"
 
