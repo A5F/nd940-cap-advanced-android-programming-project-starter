@@ -29,18 +29,16 @@ class RepresentativeViewModel(
      */
     //the logic is demanding to repository
    private fun getRepresentatives() {
-        // todo
-        //  if (validateEnteredData()) {
-            //val address = getAddress()
-        val address = Address( // MOCK LOCATION, IN ITALY, TUSCANY, RESPONSE IS 404
-             line1="Amphithatre Parkway",
-         line2= "1600",
-         city= "Mountain View",
-         state= "California",
-         zip = "94043"
-        )
+
+        val address = getAddress()
+//        val address = Address( // MOCK LOCATION, IN ITALY, TUSCANY, RESPONSE IS 404
+//             line1="Amphithatre Parkway",
+//         line2= "1600",
+//         city= "Mountain View",
+//         state= "California",
+//         zip = "94043"
+//        )
             getRepresentativeUseCase.executeAndDispose(representativeLiveData, address)
-//        }
 
     }
 
