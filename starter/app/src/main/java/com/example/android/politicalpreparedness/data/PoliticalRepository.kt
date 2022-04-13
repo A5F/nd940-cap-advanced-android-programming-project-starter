@@ -12,6 +12,8 @@ import com.example.android.politicalpreparedness.presentation.representative.mod
 
 class PoliticalRepository(private val appService: CivicsApiService, private val database: ElectionDao) {
 
+    var currentCompletElection : List<Election>? = null
+
     fun getRepresentatives(address: Address): List<Representative> {
         val response = RetrofitUtils.execute(appService.getRepresentatives(address.toFormattedString()))
         val parsedResponse = response.checkAndParseResponse()
@@ -28,6 +30,7 @@ class PoliticalRepository(private val appService: CivicsApiService, private val 
     fun getElectionList(): List<Election>{
         val response = RetrofitUtils.execute(appService.getElections())
         val parsedResponse = response.checkAndParseResponse()
+        currentCompletElection = parsedResponse.elections
         return parsedResponse.elections
     }
 
@@ -36,7 +39,7 @@ class PoliticalRepository(private val appService: CivicsApiService, private val 
         return database.getListOfElections()?: emptyList()
     }
 
-    fun getElectionById(electionId: Long): Election?{
+    fun getElectionById(electionId: Int): Election?{
         return database.getElectionById(electionId)
     }
 
@@ -45,7 +48,7 @@ class PoliticalRepository(private val appService: CivicsApiService, private val 
         return true
     }
 
-    fun deleteElection(electionId: Long):Boolean{
+    fun deleteElection(electionId: Int):Boolean{
         database.removeElection(electionId)
         return true
     }

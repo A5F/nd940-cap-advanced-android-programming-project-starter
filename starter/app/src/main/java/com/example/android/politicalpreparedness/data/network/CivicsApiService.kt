@@ -17,7 +17,7 @@ interface CivicsApiService {
 
     // Add voterinfo API Call
     @GET("/civicinfo/v2/voterinfo")
-    fun getVoterInfo(@Query("address") address: String, @Query("electionId") electionId: Long?): Call<VoterInfoResponse>
+    fun getVoterInfo(@Query("address") address: String, @Query("electionId") electionId: Int?): Call<VoterInfoResponse>
 
     // Add representatives API Call
     @GET("/civicinfo/v2/representatives")

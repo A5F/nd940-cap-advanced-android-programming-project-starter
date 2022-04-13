@@ -9,4 +9,8 @@ class VoterInfoResponse (
     val contests: String? = null, //TODO: Future Use
     val state: List<State>? = null,
     val electionElectionOfficials: List<ElectionOfficial>? = null
-)
+) {
+    override fun toString(): String {
+        return "VoterInfoResponse(election=$election, pollingLocations=$pollingLocations, contests=$contests, state=$state, electionElectionOfficials=$electionElectionOfficials)"
+    }
+}

@@ -12,6 +12,7 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="@dimen/small_margin"
         android:paddingTop="@dimen/xsmall_margin"
         android:paddingBottom="@dimen/xsmall_margin">
 <!--        android:onClick="@{() -> electionListener.onElectionItemSelected(electionData)}">-->
@@ -36,7 +37,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:text="@{electionData.name}"
+            android:text="@{electionData.electionDay.toString()}"
             style="@style/TextStyle.NormalStyle"
             tools:text="asdfasfasdfasdfasdfasdf"/>
     </androidx.constraintlayout.widget.ConstraintLayout>

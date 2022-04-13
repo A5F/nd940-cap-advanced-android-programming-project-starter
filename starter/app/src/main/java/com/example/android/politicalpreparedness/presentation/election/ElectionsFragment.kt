@@ -54,14 +54,6 @@ class ElectionsFragment: Fragment(), ResponseInterface {
         viewBinding.listSavedElections.adapter = savedElectionAdapter
         //Populate recycler adapters
         electionViewModel.getData()
-//        viewModel.state.observe(viewLifecycleOwner, Observer {
-//            if (it is State.ERROR) {
-//                it.message?.let { message ->
-//                    Snackbar.make(viewBinding.root, message, Snackbar.LENGTH_SHORT).show()
-//                }
-//            }
-//        })
-        // Refresh adapters when fragment loads
 
         return viewBinding.root
 

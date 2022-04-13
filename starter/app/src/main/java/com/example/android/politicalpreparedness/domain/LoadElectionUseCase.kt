@@ -12,10 +12,10 @@ import java.lang.Exception
 
 class LoadElectionUseCase(
     private val politicalRepository: PoliticalRepository
-)  : BaseUsecase<Election, Long?>(
+)  : BaseUsecase<Election, Int?>(
 
 ) {
-    override suspend fun invoke(params: Long?): Election {
+    override suspend fun invoke(params: Int?): Election {
         val election =  politicalRepository.getElectionById(params!!)
         if (election != null){
             return election

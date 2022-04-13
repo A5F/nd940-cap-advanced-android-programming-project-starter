@@ -3,9 +3,6 @@ package com.example.android.politicalpreparedness.presentation.election
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.example.android.politicalpreparedness.data.database.ElectionDao
 import com.example.android.politicalpreparedness.data.network.models.Division
 import com.example.android.politicalpreparedness.data.network.models.Election
 import com.example.android.politicalpreparedness.data.network.models.GetVotersRequest
@@ -16,15 +13,12 @@ import com.example.android.politicalpreparedness.domain.LoadElectionUseCase
 import com.example.android.politicalpreparedness.domain.SaveElectionUseCase
 import com.example.android.politicalpreparedness.domain.base.BaseViewModel
 import com.example.android.politicalpreparedness.domain.base.Resource
-import kotlinx.coroutines.launch
 
 class VoterInfoViewModel(private val votersInfoUseCase: GetVotersInfoUseCase,
-                        private val loadElectionUseCase: LoadElectionUseCase,
+                         private val loadElectionUseCase: LoadElectionUseCase,
                          private val saveElectionUseCase: SaveElectionUseCase,
-                         private val deleteElectionUseCase: DeleteElectionUseCase)
-    : BaseViewModel() {
-
-    val statusElectionLiveData =  MutableLiveData<Resource<Election>>()
+                         private val deleteElectionUseCase: DeleteElectionUseCase
+                         ) : BaseViewModel() {
 
     val electionLiveData =  MutableLiveData<Resource<Election>>()
     val saveElectionLiveData =  MutableLiveData<Resource<Boolean>>()
@@ -41,7 +35,7 @@ class VoterInfoViewModel(private val votersInfoUseCase: GetVotersInfoUseCase,
 
 
     // Add var and methods to populate voter info
-    fun getElectionData(division: Division, id: Long) {
+    fun getElectionData(division: Division, id: Int) {
         val address = listOf(division.state, division.country)
             .filterNot { it.isBlank() }
             .joinToString(separator = ",")
@@ -55,41 +49,26 @@ class VoterInfoViewModel(private val votersInfoUseCase: GetVotersInfoUseCase,
 
     // Add var and methods to support loading URLs
     fun loadUrl(url: String?) {
-      url?.also {
-          _webUrlLiveData.value =it
-      }
+        url?.also {
+            _webUrlLiveData.value =it
+        }
     }
 
 
     //Add var and methods to save and remove elections to local database
-    fun getElection(electionId: Long){
+    fun getElection(electionId: Int){
         loadElectionUseCase.executeAndDispose(electionLiveData, electionId)
     }
-    fun updateElection(electionId: Long){
+    fun updateElection(electionId: Int){
         val election = electionLiveData.value?.data as Election?
         if (election!= null) {
-            Log.d("update election", "election not null, devo eliminare")
-
+            Log.d("updateelection", "election not null, devo eliminare")
+            deleteElectionUseCase.executeAndDispose(deleteElectionLiveData, electionId)
         }else{
-            Log.d("update election", "election null, devo salvare")
-
+            Log.d("updateelection", "election null, devo salvare")
+            saveElectionUseCase.executeAndDispose(saveElectionLiveData, electionId)
         }
 
-    }
-
-
-    fun saveElection(electionId: Long){
-        saveElectionUseCase.executeAndDispose(saveElectionLiveData, electionId)
-    }
-
-    fun deleteElection(electionId: Long){
-        deleteElectionUseCase.executeAndDispose(deleteElectionLiveData, electionId)
-    }
-
-
-    // cont'd -- Populate initial state of save button to reflect proper action based on election saved status
-    fun onPageUpdate(electionId: Long){
-        loadElectionUseCase.executeAndDispose(statusElectionLiveData, electionId)
     }
     /**
      * Hint: The saved state can be accomplished in multiple ways. It is directly related to how elections are saved/removed from the database.

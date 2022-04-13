@@ -5,10 +5,10 @@ import com.example.android.politicalpreparedness.domain.base.BaseUsecase
 
 class DeleteElectionUseCase(
     private val politicalRepository: PoliticalRepository
-)  : BaseUsecase<Boolean, Long?>(
+)  : BaseUsecase<Boolean, Int?>(
 
 ) {
-    override suspend fun invoke(params: Long?): Boolean {
+    override suspend fun invoke(params: Int?): Boolean {
         return politicalRepository.deleteElection(params!!)
     }
 }
