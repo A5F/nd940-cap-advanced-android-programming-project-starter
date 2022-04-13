@@ -9,27 +9,26 @@ import android.location.Geocoder
 import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
-import android.view.*
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.data.network.models.Address
 import com.example.android.politicalpreparedness.databinding.FragmentRepresentativeBinding
-import com.example.android.politicalpreparedness.presentation.election.ElectionsViewModel
+import com.example.android.politicalpreparedness.domain.base.ResponseInterface
+import com.example.android.politicalpreparedness.domain.base.observeWithResource
 import com.example.android.politicalpreparedness.presentation.representative.adapter.RepresentativeListAdapter
 import com.google.android.material.snackbar.Snackbar
 import org.koin.android.ext.android.inject
-import java.util.Locale
+import java.util.*
 
-class DetailFragment : Fragment() {
-
-    companion object {
-        // Add Constant for Location request
-        private val REQUEST_LOCATION_PERMISSION = 1
-    }
+class DetailFragment : Fragment(), ResponseInterface  {
 
     // Declare ViewModel
     private val representativeViewModel : RepresentativeViewModel by inject()
@@ -44,15 +43,53 @@ class DetailFragment : Fragment() {
         // Establish bindings
         viewBinding = FragmentRepresentativeBinding.inflate(inflater, container, false)
         viewBinding.viewModel = representativeViewModel
-        viewBinding.lifecycleOwner = this
+        viewBinding.lifecycleOwner = viewLifecycleOwner
         if (savedInstanceState != null) {
             val uiState = savedInstanceState.getBundle("motionState")
             viewBinding.motionLayout.transitionState = uiState
         }
         // Define and assign Representative adapter
         viewBinding.representativeList.adapter = representativeAdapter
-        //todo submit list
-        //TODO: Populate Representative adapter
+
+
+
+        representativeViewModel.addressLiveData.observeWithResource(this,
+            onLoading = {
+
+            }, onError = {
+                Log.d("addressLiveData", "error" )
+            }){
+            Log.d("addressLiveData", it.toString() )
+            viewBinding.address = it
+        }
+
+        representativeViewModel.representativeLiveData.observeWithResource(this,
+            onLoading = {
+
+            }, onError = {
+                Log.d("representativeLiveData", "error" )
+            }){
+            Log.d("representativeLiveData", it.toString() )
+
+            //Populate Representative adapter
+            representativeAdapter.submitList(it)
+        }
+
+        viewBinding.buttonSearch.setOnClickListener {
+            hideKeyboard()
+            val address =  Address(
+                line1 = viewBinding.addressLine1.text.toString(),
+                line2 = viewBinding.addressLine2.text.toString(),
+                city = viewBinding.city.text.toString(),
+                state = viewBinding.state.selectedItem.toString(),
+                zip = viewBinding.zip.text.toString())
+            if (validAddress(address)){
+                representativeViewModel.setLocation(address)
+            }else{
+                Toast.makeText(requireContext(), "All field is required", Toast.LENGTH_LONG).show()
+            }
+
+        }
 
 
         viewBinding.buttonLocation.setOnClickListener {
@@ -62,10 +99,6 @@ class DetailFragment : Fragment() {
             }
         }
 
-        //TODO: Establish button listeners for field and location search
-//        representativeViewModel.showSnackBarInt.showSnackBarInt.observe(viewLifecycleOwner, Observer {
-//            Snackbar.make(viewBinding.root, it, Snackbar.LENGTH_LONG).show()
-//        })
         return viewBinding.root
 
     }
@@ -126,10 +159,10 @@ class DetailFragment : Fragment() {
     private fun geoCodeLocation(location: Location): Address {
         val geocoder = Geocoder(context, Locale.getDefault())
         return geocoder.getFromLocation(location.latitude, location.longitude, 1)
-                .map { address ->
-                    Address(address.thoroughfare, address.subThoroughfare, address.locality, address.adminArea, address.postalCode)
-                }
-                .first()
+            .map { address ->
+                Address(address.thoroughfare, address.subThoroughfare, address.locality, address.adminArea, address.postalCode)
+            }
+            .first()
     }
 
     private fun hideKeyboard() {
@@ -143,4 +176,17 @@ class DetailFragment : Fragment() {
         super.onSaveInstanceState(outState)
     }
 
+    private fun validAddress(address: Address): Boolean{
+       return  address.line1.isNotEmpty()
+            && address.line2?.isNotEmpty() == true
+            && address.city.isNotEmpty()
+            && address.state.isNotEmpty()
+            && address.zip.isNotEmpty()
+    }
+
+
+    companion object {
+        // Add Constant for Location request
+        private val REQUEST_LOCATION_PERMISSION = 1
+    }
 }

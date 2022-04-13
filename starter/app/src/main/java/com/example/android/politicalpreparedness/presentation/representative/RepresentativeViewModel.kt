@@ -12,9 +12,9 @@ class RepresentativeViewModel(
 ): BaseViewModel() {
 
     // Establish live data for representatives and address
-    val address = MutableLiveData<Address>()
+    val addressLiveData = MutableLiveData<Resource<Address>>()
 
-    private val _representatives = MutableLiveData<Resource<List<Representative>>>()
+     val representativeLiveData = MutableLiveData<Resource<List<Representative>>>()
     // Create function to fetch representatives from API from a provided address
 
     /**
@@ -28,28 +28,35 @@ class RepresentativeViewModel(
 
      */
     //the logic is demanding to repository
-    fun getRepresentatives() {
+   private fun getRepresentatives() {
         // todo
         //  if (validateEnteredData()) {
-            val address = getAddress()
-            getRepresentativeUseCase.executeAndDispose(_representatives, address)
+            //val address = getAddress()
+        val address = Address( // MOCK LOCATION, IN ITALY, TUSCANY, RESPONSE IS 404
+             line1="Amphithatre Parkway",
+         line2= "1600",
+         city= "Mountain View",
+         state= "California",
+         zip = "94043"
+        )
+            getRepresentativeUseCase.executeAndDispose(representativeLiveData, address)
 //        }
 
     }
 
     // Create function get address from geo location
     fun setLocation(newAddress: Address) {
-        address.value = Address(
+        addressLiveData.value = Resource.success(Address(
             line1 = newAddress.line1,
             line2 = newAddress.line2,
             city = newAddress.city,
             state = newAddress.state,
-            zip = newAddress.zip,
+            zip = newAddress.zip)
         )
         getRepresentatives()
     }
 
     // Create function to get address from individual fields
-    private fun getAddress(): Address = address.value!!
+    private fun getAddress(): Address = addressLiveData.value!!.data!!
 
 }
