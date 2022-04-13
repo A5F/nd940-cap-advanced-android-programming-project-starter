@@ -6,14 +6,14 @@ apply plugin: 'kotlinx-serialization'
 apply plugin: 'androidx.navigation.safeargs'
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
     buildFeatures {
         dataBinding true
     }
     defaultConfig {
         applicationId 'com.example.android.politicalpreparedness'
         minSdkVersion 26
-        targetSdkVersion 30
+        targetSdkVersion 31
         versionCode 1
         versionName "1.0"
     }
@@ -61,6 +61,8 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit: $version_retrofit"
     implementation "com.squareup.retrofit2:converter-moshi:$version_retrofit"
     implementation "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:$version_retrofit_coroutines_adapter"
+    implementation "com.squareup.okhttp3:okhttp:$version_okhttp"
+    implementation "com.squareup.okhttp3:logging-interceptor:$version_okhttp"
 
     // Moshi
     implementation "com.squareup.moshi:moshi:$version_moshi"
@@ -68,7 +70,9 @@ dependencies {
     implementation "com.squareup.moshi:moshi-adapters:$version_moshi"
 
     // Glide
-    //TODO: Add Glide Implementation
+    //Add Glide Implementation
+    // i prefer coil library, it's completely in kotlin and easy to use
+    implementation "io.coil-kt:coil:$version_coil"
 
     //Room
     implementation "androidx.room:room-runtime:$version_room"
@@ -76,4 +80,11 @@ dependencies {
 
     // Location
     implementation "com.google.android.gms:play-services-location:$version_play_services_location"
+
+
+    implementation "io.insert-koin:koin-android:$version_koin"
+    implementation "io.insert-koin:koin-android-ext:$version_koin_ext"
+
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+
 }

@@ -3,16 +3,91 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- TODO: Add node to connect Election ViewModel -->
+    <!-- Add node to connect Election ViewModel -->
+    <data>
+        <variable
+            name="electionViewModel"
+            type="com.example.android.politicalpreparedness.presentation.election.ElectionsViewModel" />
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.example.android.politicalpreparedness.MainActivity">
+        tools:context="com.example.android.politicalpreparedness.presentation.MainActivity">
 
-        <!-- TODO: Add Upcoming Election Recycler and Header -->
+        <!--  Add Upcoming Election Recycler and Header -->
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/labelUpcomingElections"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/small_margin"
+            android:text="@string/label_upcoming_elections"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            style="@style/TextStyle.HeaderStyle"/>
 
-        <!-- TODO: Add Saved Election Recycler and Header -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/listElections"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginHorizontal="@dimen/small_margin"
 
+            app:layout_constraintTop_toBottomOf="@id/labelUpcomingElections"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_election"/>
+<!--        app:electionListData="@{electionViewModel.electionsLiveData}"-->
+
+        <!-- Add Saved Election Recycler and Header -->
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/labelSavedElections"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/label_saved_elections"
+            android:layout_margin="@dimen/small_margin"
+            app:layout_constraintTop_toBottomOf="@id/listElections"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            style="@style/TextStyle.HeaderStyle"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/listSavedElections"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="@dimen/small_margin"
+            android:layout_marginEnd="@dimen/small_margin"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/labelSavedElections"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_election"/>
+<!--        app:electionListData="@{electionViewModel.savedElectionsLiveData}"-->
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/labelNoSavedElections"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:text="@string/label_no_saved_elections"
+            android:layout_margin="@dimen/small_margin"
+            app:layout_constraintTop_toBottomOf="@id/labelSavedElections"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            style="@style/TextStyle.NormalStyle"/>
+       <ProgressBar
+            android:id="@+id/status_loading_wheel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:visibility="gone"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+<!--        app:loaderState="@{electionViewModel.state}"-->
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
