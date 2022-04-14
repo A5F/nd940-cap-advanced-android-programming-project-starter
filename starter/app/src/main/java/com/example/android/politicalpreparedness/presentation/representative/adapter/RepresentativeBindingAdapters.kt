@@ -16,7 +16,7 @@ import com.example.android.politicalpreparedness.presentation.representative.mod
 
 @BindingAdapter("profileImage")
 fun fetchImage(view: ImageView, src: String?) {
-    src?.let {
+    if (src!= null){
         val uri = src.toUri().buildUpon().scheme("https").build()
         // Add Glide call to load image and circle crop - user ic_profile as a placeholder and for errors.
         //i prefer coil lib... the glide impl is like this
@@ -27,6 +27,7 @@ fun fetchImage(view: ImageView, src: String?) {
 
         view.load(uri){
             transformations(CircleCropTransformation())
+            placeholder(ContextCompat.getDrawable(view.context, R.drawable.ic_profile))
             error(ContextCompat.getDrawable(view.context, R.drawable.ic_profile))
         }
 
