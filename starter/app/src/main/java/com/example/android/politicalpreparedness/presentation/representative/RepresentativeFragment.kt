@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.location.Criteria
 import android.location.Geocoder
 import android.location.Location
@@ -17,6 +18,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.data.network.models.Address
@@ -25,54 +27,47 @@ import com.example.android.politicalpreparedness.domain.base.ResponseInterface
 import com.example.android.politicalpreparedness.domain.base.observeWithResource
 import com.example.android.politicalpreparedness.presentation.representative.adapter.RepresentativeListAdapter
 import com.google.android.material.snackbar.Snackbar
-import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
 class DetailFragment : Fragment(), ResponseInterface  {
 
     // Declare ViewModel
-    private val representativeViewModel : RepresentativeViewModel by inject()
+    private val representativeViewModel : RepresentativeViewModel by viewModel()
     private lateinit var viewBinding: FragmentRepresentativeBinding
 
 
-    val representativeAdapter= RepresentativeListAdapter()
+
+
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+                              savedInstanceState: Bundle?): View {
 
         // Establish bindings
         viewBinding = FragmentRepresentativeBinding.inflate(inflater, container, false)
         viewBinding.viewModel = representativeViewModel
-        viewBinding.lifecycleOwner = viewLifecycleOwner
+        viewBinding.lifecycleOwner = this
+        Log.d("onCreateView", "onCreateView" )
         if (savedInstanceState != null) {
             val uiState = savedInstanceState.getBundle("motionState")
             viewBinding.motionLayout.transitionState = uiState
         }
         // Define and assign Representative adapter
-        viewBinding.representativeList.adapter = representativeAdapter
+        viewBinding.representativeList.adapter = RepresentativeListAdapter()
 
-
-
-        representativeViewModel.addressLiveData.observeWithResource(this,
-            onLoading = {
-
-            }, onError = {
-                Log.d("addressLiveData", "error" )
-            }){
-            Log.d("addressLiveData", it.toString() )
-            viewBinding.address = it
-        }
 
         representativeViewModel.representativeLiveData.observeWithResource(this,
             onLoading = {
-
+                viewBinding.statusLoadingWheel.isVisible = it
             }, onError = {
                 Log.d("representativeLiveData", "error" )
             }){
             Log.d("representativeLiveData", it.toString() )
 
             //Populate Representative adapter
-            representativeAdapter.submitList(it)
+            //already in xml by data binding
+            representativeViewModel.representativeList.value = it
+            //representativeAdapter.submitList(it)
         }
 
         viewBinding.buttonSearch.setOnClickListener {
@@ -170,7 +165,13 @@ class DetailFragment : Fragment(), ResponseInterface  {
         imm.hideSoftInputFromWindow(requireView().windowToken, 0)
     }
 
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        Log.d("onConfigurationChanged", "onConfigurationChanged")
+    }
     override fun onSaveInstanceState(outState: Bundle) {
+        Log.d("onSaveInstanceState", "onSaveInstanceState")
+
         val state = viewBinding.motionLayout.transitionState
         outState.putBundle("motionState", state)
         super.onSaveInstanceState(outState)

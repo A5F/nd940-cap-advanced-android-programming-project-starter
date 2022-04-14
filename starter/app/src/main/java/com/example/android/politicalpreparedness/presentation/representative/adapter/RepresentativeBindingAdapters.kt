@@ -59,12 +59,9 @@ fun shouldShowView(textView: TextView, any: Any?) {
     }
 }
 
-@BindingAdapter("loaderState")
-fun bindLoaderState(progressBar: ProgressBar, state: ResourceState?) {
-    when (state) {
-        ResourceState.LOADING -> progressBar.visibility = View.VISIBLE
-        ResourceState.ERROR -> progressBar.visibility = View.GONE
-        ResourceState.SUCCESS -> progressBar.visibility = View.GONE
-    }
-}
 
+@BindingAdapter("representativeListData")
+fun bindRepresentativeAdapter(recyclerView: RecyclerView, data: List<Representative>?) {
+    val adapter = recyclerView.adapter as RepresentativeListAdapter
+    adapter.submitList(data)
+}

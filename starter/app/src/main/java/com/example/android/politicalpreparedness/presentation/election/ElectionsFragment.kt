@@ -19,11 +19,12 @@ import com.example.android.politicalpreparedness.domain.base.observeWithResource
 import com.example.android.politicalpreparedness.presentation.election.adapter.ElectionListAdapter
 import com.google.android.material.snackbar.Snackbar
 import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ElectionsFragment: Fragment(), ResponseInterface {
 
     // Declare ViewModel
-    private val electionViewModel :ElectionsViewModel by inject()
+    private val electionViewModel :ElectionsViewModel by viewModel()
 
     private val electionAdapter = ElectionListAdapter { election ->
         // Link elections to voter info

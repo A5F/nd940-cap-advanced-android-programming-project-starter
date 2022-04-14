@@ -1,5 +1,6 @@
 package com.example.android.politicalpreparedness.presentation.representative
 
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.android.politicalpreparedness.data.network.models.Address
 import com.example.android.politicalpreparedness.domain.GetRepresentativeUseCase
@@ -11,10 +12,21 @@ class RepresentativeViewModel(
     private val getRepresentativeUseCase: GetRepresentativeUseCase
 ): BaseViewModel() {
 
+    val representativeList= MutableLiveData<List<Representative>>()
+
     // Establish live data for representatives and address
-    val addressLiveData = MutableLiveData<Resource<Address>>()
 
      val representativeLiveData = MutableLiveData<Resource<List<Representative>>>()
+
+    val line1 = MutableLiveData<String>()
+    val line2 = MutableLiveData<String>()
+    val city = MutableLiveData<String>()
+    val state = MediatorLiveData<String>()
+    val zip = MutableLiveData<String>()
+
+
+
+
     // Create function to fetch representatives from API from a provided address
 
     /**
@@ -27,34 +39,42 @@ class RepresentativeViewModel(
     Note: _representatives in the above code represents the established mutable live data housing representatives
 
      */
+
     //the logic is demanding to repository
    private fun getRepresentatives() {
 
         val address = getAddress()
-//        val address = Address( // MOCK LOCATION, IN ITALY, TUSCANY, RESPONSE IS 404
-//             line1="Amphithatre Parkway",
-//         line2= "1600",
-//         city= "Mountain View",
-//         state= "California",
-//         zip = "94043"
-//        )
-            getRepresentativeUseCase.executeAndDispose(representativeLiveData, address)
+
+        getRepresentativeUseCase.executeAndDispose(representativeLiveData, address)
 
     }
 
     // Create function get address from geo location
-    fun setLocation(newAddress: Address) {
-        addressLiveData.value = Resource.success(Address(
-            line1 = newAddress.line1,
-            line2 = newAddress.line2,
-            city = newAddress.city,
-            state = newAddress.state,
-            zip = newAddress.zip)
-        )
+    fun setLocation(address: Address) {
+//        val address = Address( // MOCK LOCATION, IN ITALY, TUSCANY, RESPONSE IS 404
+//            line1="Amphithatre Parkway",
+//            line2= "1600",
+//            city= "Mountain View",
+//            state= "California",
+//            zip = "94043"
+//        )
+
+        line1.value = address.line1
+        line2.value = address.line2?:""
+        city.value = address.city
+        state.value = address.state
+        zip.value = address.zip
+
         getRepresentatives()
     }
 
     // Create function to get address from individual fields
-    private fun getAddress(): Address = addressLiveData.value!!.data!!
+     fun getAddress(): Address =  Address(
+        line1.value!!,
+        line2.value,
+        city.value!!,
+        state.value!!,
+        zip.value!!
+    )
 
 }

@@ -8,9 +8,9 @@
         <variable
             name="viewModel"
             type="com.example.android.politicalpreparedness.presentation.representative.RepresentativeViewModel" />
-        <variable
-            name="address"
-            type="com.example.android.politicalpreparedness.data.network.models.Address" />
+<!--        <variable-->
+<!--            name="address"-->
+<!--            type="com.example.android.politicalpreparedness.data.network.models.Address" />-->
     </data>
 
     <!--  Add motion scene to hide form on vertical scroll. -->
@@ -35,14 +35,14 @@
         <!-- Add visual styling and content -->
         <EditText
             android:id="@+id/address_line_1"
+            style="@style/SubtitleStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:autofillHints="postalAddress"
-            android:text="@{address.line1}"
             android:inputType="textPostalAddress"
+            android:text="@{viewModel.line1}"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/search_title"
-            style="@style/SubtitleStyle"/>
+            app:layout_constraintTop_toBottomOf="@id/search_title" />
 
         <!--  Add data binding value -->
         <!--  Add visual styling and content -->
@@ -52,7 +52,7 @@
             android:layout_height="0dp"
             android:autofillHints="postalAddress"
             android:hint="@string/label_address_line_2"
-            android:text="@{address.line2}"
+            android:text="@{viewModel.line2}"
             android:inputType="textPostalAddress"
             app:layout_constraintStart_toStartOf="parent"
             style="@style/SubtitleStyle"
@@ -66,7 +66,7 @@
             android:layout_height="wrap_content"
             android:autofillHints=""
             android:hint="@string/label_city"
-            android:text="@{address.city}"
+            android:text="@{viewModel.city}"
             style="@style/SubtitleStyle"
             android:inputType="textPostalAddress"
             app:layout_constraintStart_toStartOf="parent"
@@ -103,7 +103,7 @@
             android:hint="@string/label_zip"
             android:maxLength="5"
             style="@style/SubtitleStyle"
-            android:text="@{address.zip}"
+            android:text="@{viewModel.zip}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="@id/city"
             app:layout_constraintTop_toBottomOf="@id/city" />
@@ -144,14 +144,13 @@
             android:gravity="center"
             android:textAlignment="center"
             android:visibility="visible"
-
+            app:representativeListData="@{viewModel.representativeList}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/representative_title"
             motion:visibilityMode="ignore"
             motion:listitem="@layout/item_representative"/>
-<!--        app:representativeListData="@{viewModel.representativeList}"-->
-        <!-- TODO: Add visual styling and content -->
+        <!--  Add visual styling and content -->
         <TextView
             android:id="@+id/list_placeholder"
             android:layout_width="match_parent"

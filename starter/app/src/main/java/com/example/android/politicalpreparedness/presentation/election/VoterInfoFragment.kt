@@ -13,11 +13,11 @@ import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.databinding.FragmentVoterInfoBinding
 import com.example.android.politicalpreparedness.domain.base.ResponseInterface
 import com.example.android.politicalpreparedness.domain.base.observeWithResource
-import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class VoterInfoFragment : Fragment(), ResponseInterface {
 
-    private val voterInfoViewModel :VoterInfoViewModel by inject()
+    private val voterInfoViewModel :VoterInfoViewModel by viewModel()
     lateinit var  viewBinding : FragmentVoterInfoBinding
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
